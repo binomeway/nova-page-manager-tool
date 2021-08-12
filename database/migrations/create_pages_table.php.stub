@@ -1,0 +1,45 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreatePagesTable extends Migration
+{
+    private string $pagesTable;
+
+    public function __construct()
+    {
+        $this->pagesTable = config('nova-page-manager-tool.pages_table_name');
+    }
+
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create($this->pagesTable, function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->string('slug')->unique();
+            $table->string('template')->nullable();
+            $table->string('label')->nullable();
+            $table->text('content');
+            $table->unsignedTinyInteger('order_column')->default(0);
+            $table->json('meta')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists($this->pagesTable);
+    }
+}

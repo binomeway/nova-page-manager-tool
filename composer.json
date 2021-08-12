@@ -1,0 +1,35 @@
+{
+    "name": "binomeway/nova-page-manager-tool",
+    "description": "A Laravel Nova tool to manage pages.",
+    "keywords": [
+        "laravel",
+        "nova"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=8.0",
+        "manogi/nova-tiptap": "^1.4",
+        "spatie/laravel-package-tools": "^1.9",
+        "eminiarts/nova-tabs": "^1.4",
+        "ebess/advanced-nova-media-library": "^3.6",
+        "binomeway/nova-taxonomies-tool": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "BinomeWay\\NovaPageManagerTool\\": "src/",
+            "BinomeWay\\NovaPageManagerTool\\Database\\Factories\\": "database/factories"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "BinomeWay\\NovaPageManagerTool\\ToolServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
