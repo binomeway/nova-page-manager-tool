@@ -16,6 +16,7 @@ class ToolServiceProvider extends PackageServiceProvider
         $package
             ->name('nova-page-manager-tool')
             ->hasConfigFile()
+            ->hasViews()
             ->hasMigrations([
                 'create_pages_table'
             ]);
@@ -28,7 +29,7 @@ class ToolServiceProvider extends PackageServiceProvider
      */
     public function packageBooted()
     {
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'nova-page-manager-tool');
+       // $this->loadViewsFrom(__DIR__ . '/../resources/views', 'nova-page-manager-tool');
 
         $this->app->booted(function () {
             $this->routes();
@@ -37,6 +38,11 @@ class ToolServiceProvider extends PackageServiceProvider
         /* Nova::serving(function (ServingNova $event) {
              //
          });*/
+
+        $this->app->make(TemplateManager::class)
+            ->registerPath('page-manager', [
+               'nova-page-manager-tool::templates.default',
+            ]);
     }
 
     /**

@@ -5,58 +5,69 @@ namespace BinomeWay\NovaPageManagerTool\Services;
 
 
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class TemplateManager
 {
+    private Collection $paths;
     private $templates = [];
-    private $defaultPath;
 
     /**
      * PageManager constructor.
      */
-    public function __construct($templatesPath = 'pages/templates')
+    public function __construct()
     {
-        $this->defaultPath = $templatesPath;
+        $this->paths = collect();
+    }
+
+    public function registerPath($group, array $paths): static
+    {
+        $this->paths->put($group, $paths);
+
+        return $this;
     }
 
 
     public function templates($folder = null): \Illuminate\Support\Collection
     {
-        if(!$this->templates){
-            $this->templates = $this->findTemplates($folder);
+        if (!$this->templates) {
+            $this->templates = $this->findTemplates();
         }
 
         return $this->templates;
     }
 
-    public function findTemplates($folder = null): \Illuminate\Support\Collection
+    public function findTemplates(): \Illuminate\Support\Collection
     {
-        // TODO: Find a way to make this work as a package.
-        return collect();
+        $templates = collect();
 
-        return $this->collectFiles($this->makePath($folder))->mapWithKeys(function($file){
-            return $this->parseFileName($file->getFilenameWithoutExtension());
-        });
+        foreach ($this->paths as $group => $paths) {
+
+            $templates->put($group, $this->getTemplatesFromPath($paths));
+        }
+
+        debugbar()->debug($templates->toArray());
+
+        return $templates;
     }
 
-    private function makePath($folder = null)
+    public function getTemplatesFromPath($paths): Collection
     {
-        $path = $folder ?? $this->defaultPath;
-
-        return resource_path("views/{$path}");
+        return collect($paths)->mapWithKeys(fn($viewPath) => [$viewPath => view($viewPath)->getPath()]);
     }
 
-    private function parseFileName($filenameWithoutExtension)
+    private function collectFiles($path): Collection
+    {
+        return collect(app(Filesystem::class)->files($path));
+    }
+
+    private function parseFileName($filenameWithoutExtension): array
     {
         $value = str_replace('.blade', '', $filenameWithoutExtension);
         $display = Str::title(str_replace(['-', '_'], ' ', $value));
 
         return [$value => $display];
-    }
-
-    private function collectFiles($path)
-    {
-        return collect(app(Filesystem::class)->files($path));
     }
 }

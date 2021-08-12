@@ -50,6 +50,8 @@ class Page extends Resource
 
     public function fields(Request $request)
     {
+        $options = app(TemplateManager::class)->findTemplates();
+
         return [
             Text::make(__('Title'), 'title')
                 ->sortable()
@@ -67,14 +69,12 @@ class Page extends Resource
 
             FieldPresets::status(PageStatusTag::NAME)->sortable(),
 
-            Select::make(__('Template'), 'template')
-                ->options(function () {
-                    return app(TemplateManager::class)->templates();
-                })
+            /*Select::make(__('Template'), 'template')
+                ->options($options)
                 ->default('default')
                 ->searchable()
                 ->displayUsingLabels()
-                ->hideFromIndex(),
+                ->hideFromIndex(),*/
 
             Tags::make(__('Positions'), 'positions')
                 ->type(PagePositionsTag::NAME)
