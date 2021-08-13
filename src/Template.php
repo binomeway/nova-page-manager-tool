@@ -8,30 +8,12 @@ use Illuminate\Contracts\Support\Arrayable;
 use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
 
-class Template implements Arrayable
+abstract class Template implements Arrayable
 {
-    private string $path;
-    private string $label;
-    private string $group;
+    protected string $path;
+    protected string $label;
+    protected string $group;
 
-    /**
-     * Template constructor.
-     * @param string $label
-     * @param string $path
-     * @param string $group
-     */
-    public function __construct(string $label, string $path, string $group)
-    {
-        $this->path = $path;
-        $this->label = $label;
-        $this->group = $group;
-    }
-
-    #[Pure]
-    public static function make(...$args): static
-    {
-        return new static(...$args);
-    }
 
     public function label(): string
     {

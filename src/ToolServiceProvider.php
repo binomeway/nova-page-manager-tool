@@ -3,7 +3,6 @@
 namespace BinomeWay\NovaPageManagerTool;
 
 use BinomeWay\NovaPageManagerTool\Http\Middleware\Authorize;
-use BinomeWay\NovaPageManagerTool\Layouts\ContentSectionLayout;
 use BinomeWay\NovaPageManagerTool\Layouts\TrixLayout;
 use BinomeWay\NovaPageManagerTool\Services\PageBuilder;
 use BinomeWay\NovaPageManagerTool\Services\TemplateManager;
@@ -67,11 +66,7 @@ class ToolServiceProvider extends PackageServiceProvider
     public function packageRegistered()
     {
         $this->app->singleton(PageBuilder::class, fn() => new PageBuilder(config('nova-page-manager-tool.layouts', [])));
-
-        // TODO: Should be refactored into static classes
-        $this->app->singleton(TemplateManager::class, fn() => new TemplateManager([
-            Template::make('Default', 'nova-page-manager-tool::templates.default', $this->package->name),
-        ]));
+        $this->app->singleton(TemplateManager::class, fn() => new TemplateManager(config('nova-page-manager-tool.templates', [])));
     }
 
 

@@ -5,12 +5,12 @@ namespace BinomeWay\NovaPageManagerTool\Services;
 
 
 use Illuminate\Support\Collection;
+use JetBrains\PhpStorm\Pure;
 use Whitecube\NovaFlexibleContent\Flexible;
 
 class PageBuilder
 {
     private Collection $blocks;
-
 
     public function __construct(array $blocks = [])
     {
@@ -31,5 +31,10 @@ class PageBuilder
     public function blocks(): Collection
     {
         return $this->blocks;
+    }
+
+    #[Pure] public function hasAnyBlocks(): bool
+    {
+        return $this->blocks->count() > 0;
     }
 }

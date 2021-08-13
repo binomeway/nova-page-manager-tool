@@ -1,4 +1,5 @@
 <?php
+
 return [
 
     /**
@@ -23,6 +24,13 @@ return [
      */
     'templates_searchable_threshold' => 10,
 
+    /**
+     * The default templates used for selection on the Page resource.
+     */
+    'templates' => [
+        \BinomeWay\NovaPageManagerTool\Templates\DefaultTemplate::class,
+    ],
+
 
     /**
      * If there are more layouts than the set threshold,
@@ -41,10 +49,11 @@ return [
 
     /**
      * The default layouts that are available for the page builder
+     *
+     * If there are no layouts, the flexible filed will be hidden.
      */
     'layouts' => [
         \BinomeWay\NovaPageManagerTool\Layouts\ContentSectionLayout::class,
     ],
-
 
 ];
