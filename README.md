@@ -8,7 +8,7 @@ This tool depends on the following packages:
 
 - [binomeway/nova-taxonomies-tool](https://github.com/binomeway/nova-taxonomies-tool)
 
-Please, refer to their documentation for more details.
+Please, refer to its documentation for installation and usage instructions.
 
 ## Installation
 
@@ -42,34 +42,73 @@ php artisan vendor:publish --provider="\BinomeWay\NovaPageManagerTool\ToolServic
 
 ## Usage
 
-### Registering Templates
+### Templates
 
-Adding types from your package.
+#### Defining Templates
+
+You can define a new template by creating a class and extend it from `BinomeWay\NovaPageManagerTool\Template`.
 
 ```php
-    use  \BinomeWay\NovaPageManagerTool\Facades\TemplateManager;
-    use  \BinomeWay\NovaPageManagerTool\Template;
-    
-    public function boot() {
-        TemplateManager::register([
-        
-            Template::make('label', 'namespace::path.to.view', 'group'),
-            Template::make('About Us', 'pages.about-us', 'Global'),
-            
-        ]);
-    }
+namespace App\Templates;
+
+use BinomeWay\NovaPageManagerTool\Template;
+
+class AboutTemplate extends Template
+{
+    protected string $group = 'General'; // Displayed in the select field
+    protected string $label = 'About Us'; // Displayed in the select field
+    protected string $path = 'pages.about-us';
+}
+
 ```
+
+#### Registering Templates
+
+After you have defined your template, register it from a ServiceProvider. It can be placed in the `AppServiceProvider`, `ViewServiceProvider` or any other service provider.
+
+```php
+use  \BinomeWay\NovaPageManagerTool\Facades\TemplateManager;
+
+public function boot() {
+    TemplateManager::register([
+   
+       \App\Templates\AboutTemplate::class,
+   
+    ]);
+}
+```
+### Page Builder
+
+#### Layouts
+
+##### Define Layouts
+
+TODO: documentation
+
+##### Register Layouts
+
+TODO: documentation
+
+#### Presets
+
+##### Define Presets
+
+TODO: documentation
+
+##### Register Presets
+
+TODO: documentation
 
 
 ## Roadmap
 
-- Meta Data builder
-- Improved publishing workflow
-- Improved template system
-- Versioning system
-- Collaborative editing
-- Multi-Language support
-- Making the tool more extendable
+- [X] ~~Page builder~~
+- [ ] Improved publishing workflow
+- [ ] Improved template system
+- [ ] Versioning system
+- [ ] Multi-Language support
+- [ ] Collaborative editing
+- [ ] Making the tool more extendable
 
 ## Credits
 
