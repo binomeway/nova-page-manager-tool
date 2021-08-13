@@ -4,18 +4,16 @@
 namespace BinomeWay\NovaPageManagerTool\Nova\Resources;
 
 
-use BinomeWay\NovaPageManagerTool\Models\Page as PageModel;
+use BinomeWay\NovaPageManagerTool\Facades\TemplateManager;
+use BinomeWay\NovaPageManagerTool\Nova\Actions\{UpdateSingleTag, UpdateTag};
 use BinomeWay\NovaPageManagerTool\Nova\Filters\SingleTag;
-use BinomeWay\NovaPageManagerTool\Tags\PageStatusTag;
-use BinomeWay\NovaPageManagerTool\Nova\Actions\{UpdatePosition, UpdateSingleTag, UpdateStatus, UpdateTag};
-use BinomeWay\NovaPageManagerTool\Nova\Filters\StatusType;
-use BinomeWay\NovaPageManagerTool\Services\TemplateManager;
 use BinomeWay\NovaPageManagerTool\Tags\PagePositionsTag;
+use BinomeWay\NovaPageManagerTool\Tags\PageStatusTag;
 use BinomeWay\NovaPageManagerTool\Utils\FieldPresets;
 use BinomeWay\NovaTaxonomiesTool\Resources\Tag;
 use Eminiarts\Tabs\{Tab, Tabs, TabsOnEdit};
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\{Badge, ID, Select, Slug, Text};
+use Laravel\Nova\Fields\{Select, Slug, Text};
 use Laravel\Nova\Resource;
 use Spatie\TagsField\Tags;
 
@@ -50,7 +48,7 @@ class Page extends Resource
 
     public function fields(Request $request)
     {
-        $options = app(TemplateManager::class)->findTemplates();
+
 
         return [
             Text::make(__('Title'), 'title')
@@ -69,12 +67,12 @@ class Page extends Resource
 
             FieldPresets::status(PageStatusTag::NAME)->sortable(),
 
-            /*Select::make(__('Template'), 'template')
-                ->options($options)
-                ->default('default')
-                ->searchable()
+            Select::make(__('Template'), 'template')
+                ->options(fn () => TemplateManager::toSelectOptions())
+                ->searchable(fn() => TemplateManager::isSearchable())
                 ->displayUsingLabels()
-                ->hideFromIndex(),*/
+                ->nullable()
+                ->hideFromIndex(),
 
             Tags::make(__('Positions'), 'positions')
                 ->type(PagePositionsTag::NAME)
@@ -106,7 +104,7 @@ class Page extends Resource
     /**
      * Get the filters available for the resource.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @return array
      */
     public function filters(Request $request)
@@ -121,7 +119,7 @@ class Page extends Resource
     /**
      * Get the actions available for the resource.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @return array
      */
     public function actions(Request $request)

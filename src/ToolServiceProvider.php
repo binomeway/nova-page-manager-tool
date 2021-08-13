@@ -38,11 +38,6 @@ class ToolServiceProvider extends PackageServiceProvider
         /* Nova::serving(function (ServingNova $event) {
              //
          });*/
-
-        $this->app->make(TemplateManager::class)
-            ->registerPath('page-manager', [
-               'nova-page-manager-tool::templates.default',
-            ]);
     }
 
     /**
@@ -68,7 +63,13 @@ class ToolServiceProvider extends PackageServiceProvider
      */
     public function packageRegistered()
     {
-        $this->app->singleton(TemplateManager::class);
+        $this->app->singleton(TemplateManager::class, function() {
+            $templates = [
+                Template::make('Default', 'nova-page-manager-tool::templates.default', $this->package->name),
+            ];
+
+            return new TemplateManager($templates);
+        });
     }
 
 

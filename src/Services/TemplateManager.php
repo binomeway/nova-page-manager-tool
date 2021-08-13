@@ -4,70 +4,62 @@
 namespace BinomeWay\NovaPageManagerTool\Services;
 
 
-use Illuminate\Filesystem\Filesystem;
+use BinomeWay\NovaPageManagerTool\Template;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Illuminate\View\View;
 
 class TemplateManager
 {
-    private Collection $paths;
-    private $templates = [];
+    private Collection $templates;
 
     /**
      * PageManager constructor.
      */
-    public function __construct()
+    public function __construct(array $templates = [])
     {
-        $this->paths = collect();
+        $this->templates = collect();
+
+        if ($templates) {
+            $this->register($templates);
+        }
     }
 
-    public function registerPath($group, array $paths): static
+    public function register(array $templates): static
     {
-        $this->paths->put($group, $paths);
+        foreach ($templates as $template) {
+            if ($template instanceof Template) {
+                $this->templates->push($template);
+            }
+        }
 
         return $this;
     }
 
-
     public function templates($folder = null): \Illuminate\Support\Collection
     {
-        if (!$this->templates) {
-            $this->templates = $this->findTemplates();
-        }
-
         return $this->templates;
     }
 
-    public function findTemplates(): \Illuminate\Support\Collection
+    public function toSelectOptions(): Collection
     {
-        $templates = collect();
-
-        foreach ($this->paths as $group => $paths) {
-
-            $templates->put($group, $this->getTemplatesFromPath($paths));
-        }
-
-        debugbar()->debug($templates->toArray());
-
-        return $templates;
+        return $this->isSearchable()
+            ? $this->mapForSearchable()
+            : $this->mapDefaultOptions();
     }
 
-    public function getTemplatesFromPath($paths): Collection
+    public function isSearchable(): bool
     {
-        return collect($paths)->mapWithKeys(fn($viewPath) => [$viewPath => view($viewPath)->getPath()]);
+        return $this->templates->count() > config('nova-page-manager-tool.templates_searchable_threshold', 10);
     }
 
-    private function collectFiles($path): Collection
+    private function mapForSearchable(): Collection
     {
-        return collect(app(Filesystem::class)->files($path));
+        return $this->templates->mapWithKeys(fn($template) => [$template->path() => $template]);
     }
 
-    private function parseFileName($filenameWithoutExtension): array
+    private function mapDefaultOptions(): Collection
     {
-        $value = str_replace('.blade', '', $filenameWithoutExtension);
-        $display = Str::title(str_replace(['-', '_'], ' ', $value));
-
-        return [$value => $display];
+        return $this->templates->mapWithKeys(
+            fn($template) => [$template->path() => $template->toArray()]
+        );
     }
 }
