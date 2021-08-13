@@ -37,6 +37,6 @@ class NovaPageManagerTool extends Tool
      */
     public function renderNavigation()
     {
-        return view('nova-page-manager-tool::navigation');
+        return view('nova-page-manager-tool::nova.navigation');
     }
 }

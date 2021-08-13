@@ -8,14 +8,13 @@ use BinomeWay\NovaPageManagerTool\Database\Factories\PageFactory;
 use BinomeWay\NovaPageManagerTool\Tags\PageStatusTag;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Tags\HasTags;
+use Whitecube\NovaFlexibleContent\Concerns\HasFlexible;
+use Whitecube\NovaFlexibleContent\Value\FlexibleCast;
 
-class Page extends Model implements HasMedia
+class Page extends Model
 {
-    use HasFactory, InteractsWithMedia, HasTags;
+    use HasFactory, HasTags, HasFlexible;
 
     const STATUS_PUBLISHED = 'published';
     const STATUS_DRAFT = 'draft';
@@ -23,7 +22,7 @@ class Page extends Model implements HasMedia
     protected $fillable = ['status', 'positions'];
 
     protected $casts = [
-        'meta' => 'array',
+        'meta' => FlexibleCast::class,
     ];
 
     protected static function newFactory()
@@ -31,15 +30,17 @@ class Page extends Model implements HasMedia
         return new PageFactory();
     }
 
+
     public function getTable()
     {
         return config('nova-page-manager-tool.pages_table_name');
     }
 
-    /*public function url($args = []): string
+    public function url($args = []): string
     {
-        return route('pages.show', ['page' => $this, ...$args]);
-    }*/
+        // TODO: Build the correct url path
+        return env('APP_URL') . '/' . $this->slug;
+    }
 
 
     public function isStatus($status): bool
@@ -48,17 +49,6 @@ class Page extends Model implements HasMedia
         return $this->status === $status;
     }
 
-    /**
-     * @return array
-     * @deprecated Use spatie/tags
-     */
-    public static function statusOptions(): array
-    {
-        return [
-            self::STATUS_DRAFT => __('Draft'),
-            self::STATUS_PUBLISHED => __('Published'), // TODO; Refactor into status tags
-        ];
-    }
 
     public function scopeWhereStatus($query, array $statuses, string $tagType = PageStatusTag::NAME)
     {
@@ -73,19 +63,5 @@ class Page extends Model implements HasMedia
     public function scopeDraft($query)
     {
         return $query->withAnyTags(['draft'], PageStatusTag::NAME);
-    }
-
-
-    public function registerMediaConversions(Media $media = null): void
-    {
-        $this->addMediaConversion('thumb')
-            ->width(130)
-            ->height(130);
-    }
-
-    public function registerMediaCollections(): void
-    {
-        $this->addMediaCollection('thumb')->singleFile();
-        $this->addMediaCollection('banner')->singleFile();
     }
 }

@@ -4,18 +4,21 @@
 namespace BinomeWay\NovaPageManagerTool\Nova\Resources;
 
 
+use BinomeWay\NovaPageManagerTool\Facades\PageBuilder;
 use BinomeWay\NovaPageManagerTool\Facades\TemplateManager;
-use BinomeWay\NovaPageManagerTool\Nova\Actions\{UpdateSingleTag, UpdateTag};
-use BinomeWay\NovaPageManagerTool\Nova\Filters\SingleTag;
+use BinomeWay\NovaPageManagerTool\Presets\PageBuilderPreset;
 use BinomeWay\NovaPageManagerTool\Tags\PagePositionsTag;
 use BinomeWay\NovaPageManagerTool\Tags\PageStatusTag;
 use BinomeWay\NovaPageManagerTool\Utils\FieldPresets;
+use BinomeWay\NovaTaxonomiesTool\Nova\Actions\{UpdateSingleTag, UpdateTag};
+use BinomeWay\NovaTaxonomiesTool\Nova\Filters\SingleTag;
 use BinomeWay\NovaTaxonomiesTool\Resources\Tag;
 use Eminiarts\Tabs\{Tab, Tabs, TabsOnEdit};
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\{Select, Slug, Text};
+use Laravel\Nova\Fields\{Line, Select, Slug, Stack, Text};
 use Laravel\Nova\Resource;
 use Spatie\TagsField\Tags;
+use Whitecube\NovaFlexibleContent\Flexible;
 
 class Page extends Resource
 {
@@ -48,31 +51,46 @@ class Page extends Resource
 
     public function fields(Request $request)
     {
-
-
         return [
+
+            Stack::make(__('Title'), [
+                Line::make(__('Title'), 'title')->asHeading(),
+
+                Line::make(__('Slug'), fn () =>
+                     view('nova-page-manager-tool::nova.slug-link', [
+                        'slug' => $this->slug,
+                        'url' => $this->url(),
+                    ])->render()
+                )->asHtml()
+                ->asSmall(),
+
+            ])->sortable(),
+
+
             Text::make(__('Title'), 'title')
-                ->sortable()
+                ->onlyOnForms()
                 ->required(),
 
             Slug::make(__('Slug'), 'slug')
                 ->from('title')
                 ->sortable()
+                ->onlyOnForms()
                 ->required(),
+
 
             Text::make(__('Label'), 'label')
                 ->help(__('This will be used when the page is placed in menu list, if left empty the title will be the default value.'))
                 ->sortable()
                 ->nullable(),
 
-            FieldPresets::status(PageStatusTag::NAME)->sortable(),
-
             Select::make(__('Template'), 'template')
-                ->options(fn () => TemplateManager::toSelectOptions())
+                ->options(fn() => TemplateManager::toSelectOptions())
                 ->searchable(fn() => TemplateManager::isSearchable())
                 ->displayUsingLabels()
                 ->nullable()
                 ->hideFromIndex(),
+
+            FieldPresets::status(PageStatusTag::NAME)->sortable(),
 
             Tags::make(__('Positions'), 'positions')
                 ->type(PagePositionsTag::NAME)
@@ -87,7 +105,7 @@ class Page extends Resource
                 ]),
 
                 Tab::make(__('Other'), [
-                    FieldPresets::meta(),
+                    Flexible::make('Meta')->preset(config('nova-page-manager-tool.preset', PageBuilderPreset::class)),
                 ]),
             ]),
         ];
