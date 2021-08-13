@@ -1,13 +1,12 @@
 # Nova Page Manager Tool
 
-Manage pages from your Nova panel.
+Manage static pages from your Nova panel.
 
 ## Prerequisites
 
 This tool depends on the following packages:
 
 - [binomeway/nova-taxonomies-tool](https://github.com/binomeway/nova-taxonomies-tool)
-- [ebess/advanced-nova-media-library](https://github.com/ebess/advanced-nova-media-library)
 
 Please, refer to their documentation for more details.
 

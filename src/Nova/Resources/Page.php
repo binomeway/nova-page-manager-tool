@@ -86,14 +86,6 @@ class Page extends Resource
                     FieldPresets::content(),
                 ]),
 
-                /*Tab::make(__('Media'), [
-                    // THUMBNAIL
-                  //  FieldPresets::thumbnail(),
-
-                    // BANNER
-                   // FieldPresets::banner()->hideFromIndex(),
-                ]),*/
-
                 Tab::make(__('Other'), [
                     FieldPresets::meta(),
                 ]),

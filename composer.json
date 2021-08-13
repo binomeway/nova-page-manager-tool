@@ -11,7 +11,6 @@
         "manogi/nova-tiptap": "^1.4",
         "spatie/laravel-package-tools": "^1.9",
         "eminiarts/nova-tabs": "^1.4",
-        "ebess/advanced-nova-media-library": "^3.6",
         "binomeway/nova-taxonomies-tool": "*"
     },
     "autoload": {
