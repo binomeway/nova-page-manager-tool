@@ -18,12 +18,11 @@ class NovaPageManagerTool extends Tool
      */
     public function boot()
     {
-        Nova::script('nova-page-manager-tool', __DIR__.'/../dist/js/tool.js');
-        Nova::style('nova-page-manager-tool', __DIR__.'/../dist/css/tool.css');
+        //Nova::script('nova-page-manager-tool', __DIR__.'/../dist/js/tool.js');
+        //Nova::style('nova-page-manager-tool', __DIR__.'/../dist/css/tool.css');
 
-        Nova::resources([
-            Page::class,
-        ]);
+        $resources =  array_values(config('nova-page-manager-tool.resources'));
+        Nova::resources($resources);
 
         Taxonomies::addTypes([
             PagePositionsTag::NAME => PagePositionsTag::DISPLAY,
