@@ -60,3 +60,17 @@ Adding types from your package.
     }
 ```
 
+
+## Roadmap
+
+- Meta Data builder
+- Improved publishing workflow
+- Improved template system
+- Versioning system
+- Collaborative editing
+- Multi-Language support
+- Making the tool more extendable
+
+## Credits
+
+- [Codrin Axinte](https://github.com/codrin-axinte)
