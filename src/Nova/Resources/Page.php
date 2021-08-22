@@ -11,6 +11,7 @@ use BinomeWay\NovaPageManagerTool\Tags\PagePositionsTag;
 use BinomeWay\NovaPageManagerTool\Tags\PageStatusTag;
 use BinomeWay\NovaPageManagerTool\Utils\FieldPresets;
 use BinomeWay\NovaTaxonomiesTool\Nova\Actions\{UpdateSingleTag, UpdateTag};
+use BinomeWay\NovaTaxonomiesTool\Nova\Filters\MultiTags;
 use BinomeWay\NovaTaxonomiesTool\Nova\Filters\SingleTag;
 use BinomeWay\NovaTaxonomiesTool\Resources\Tag;
 use Eminiarts\Tabs\{Tab, Tabs, TabsOnEdit};
@@ -56,13 +57,12 @@ class Page extends Resource
             Stack::make(__('Title'), [
                 Line::make(__('Title'), 'title')->asHeading(),
 
-                Line::make(__('Slug'), fn () =>
-                     view('nova-page-manager-tool::nova.slug-link', [
-                        'slug' => $this->slug,
-                        'url' => $this->url(),
-                    ])->render()
+                Line::make(__('Slug'), fn() => view('nova-page-manager-tool::nova.slug-link', [
+                    'slug' => $this->slug,
+                    'url' => $this->url(),
+                ])->render()
                 )->asHtml()
-                ->asSmall(),
+                    ->asSmall(),
 
             ])->sortable(),
 
@@ -112,7 +112,7 @@ class Page extends Resource
     private function otherFields(): array
     {
         $fields = [];
-        if(PageBuilder::hasAnyBlocks()){
+        if (PageBuilder::hasAnyBlocks()) {
             $fields[] = Flexible::make(__('Blocks'), 'meta')
                 ->preset(config('nova-page-manager-tool.preset', PageBuilderPreset::class));
         }
@@ -131,7 +131,11 @@ class Page extends Resource
         return [
             SingleTag::make()
                 ->withName(__('By Status'))
-                ->withTagType(PageStatusTag::NAME)
+                ->withTagType(PageStatusTag::NAME),
+
+            MultiTags::make()
+                ->withName(__('By Position'))
+                ->withTagType(PagePositionsTag::NAME),
         ];
     }
 
