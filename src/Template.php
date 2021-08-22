@@ -6,7 +6,6 @@ namespace BinomeWay\NovaPageManagerTool;
 
 use Illuminate\Contracts\Support\Arrayable;
 use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
 
 abstract class Template implements Arrayable
 {
@@ -37,7 +36,7 @@ abstract class Template implements Arrayable
 
     public function __toString(): string
     {
-      return "$this->label ($this->group)";
+        return "$this->label ($this->group)";
     }
 
 

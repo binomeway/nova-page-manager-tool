@@ -104,7 +104,7 @@ class Page extends Resource
                     FieldPresets::content(),
                 ]),
 
-                Tab::make(__('Other'), $this->otherFields())
+                Tab::make(__('Page Builder'), $this->otherFields())
             ]),
         ];
     }
@@ -113,7 +113,7 @@ class Page extends Resource
     {
         $fields = [];
         if(PageBuilder::hasAnyBlocks()){
-            $fields[] = Flexible::make('Meta')
+            $fields[] = Flexible::make(__('Blocks'), 'meta')
                 ->preset(config('nova-page-manager-tool.preset', PageBuilderPreset::class));
         }
 
