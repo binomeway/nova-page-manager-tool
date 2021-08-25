@@ -50,6 +50,7 @@ class FieldPresets
             ->withLinkToTagResource(Tag::class)
             ;
     }
+
     public static function url($link, $text): Text
     {
         return Text::make('Slug', function () use ($link, $text) {
@@ -59,6 +60,28 @@ class FieldPresets
                 </a>";
         })
             ->asHtml();
+    }
+
+    public static function tiptap($display, $field): Tiptap
+    {
+        return Tiptap::make($display, $field)
+            ->headingLevels([2, 3, 4])
+            ->buttons([
+                'heading',
+                'italic',
+                'bold',
+                'code',
+                'link',
+                'strike',
+                'underline',
+                'bullet_list',
+                'ordered_list',
+                'code_block',
+                'blockquote',
+                'table',
+                'horizontal_rule',
+                'edit_html',
+            ]);
     }
 
     public static function content(): Tiptap

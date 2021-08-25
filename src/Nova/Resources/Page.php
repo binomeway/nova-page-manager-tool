@@ -18,12 +18,13 @@ use Eminiarts\Tabs\{Tab, Tabs, TabsOnEdit};
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\{Line, Select, Slug, Stack, Text};
 use Laravel\Nova\Resource;
+use OptimistDigital\NovaSortable\Traits\HasSortableRows;
 use Spatie\TagsField\Tags;
 use Whitecube\NovaFlexibleContent\Flexible;
 
 class Page extends Resource
 {
-    use TabsOnEdit;
+    use TabsOnEdit, HasSortableRows;
 
     /**
      * The model the resource corresponds to.
@@ -47,7 +48,7 @@ class Page extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'title', 'content', 'slug', 'label',
+        'id', 'title', 'summary', 'slug', 'label',
     ];
 
     public function fields(Request $request)
@@ -101,7 +102,7 @@ class Page extends Resource
 
             Tabs::make(__('Tabs'), [
                 Tab::make(__('Body'), [
-                    FieldPresets::content(),
+                    FieldPresets::tiptap(__('Summary'), 'summary'),
                 ]),
 
                 Tab::make(__('Page Builder'), $this->otherFields())
@@ -113,7 +114,7 @@ class Page extends Resource
     {
         $fields = [];
         if (PageBuilder::hasAnyBlocks()) {
-            $fields[] = Flexible::make(__('Blocks'), 'meta')
+            $fields[] = Flexible::make(__('Blocks'), 'blocks')
                 ->preset(config('nova-page-manager-tool.preset', PageBuilderPreset::class));
         }
 
