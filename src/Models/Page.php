@@ -3,7 +3,9 @@
 
 namespace BinomeWay\NovaPageManagerTool\Models;
 
+use BinomeWay\NovaPageManagerTool\Contracts\InteractsWithUrlBuilder;
 use BinomeWay\NovaPageManagerTool\Tags\PagePositionsTag;
+use BinomeWay\NovaPageManagerTool\Traits\HasUrlBuilder;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use BinomeWay\NovaPageManagerTool\Database\Factories\PageFactory;
@@ -14,9 +16,9 @@ use Spatie\Tags\HasTags;
 use Whitecube\NovaFlexibleContent\Concerns\HasFlexible;
 use Whitecube\NovaFlexibleContent\Value\FlexibleCast;
 
-class Page extends Model implements Sortable
+class Page extends Model implements Sortable, InteractsWithUrlBuilder
 {
-    use HasFactory, HasTags, HasFlexible, SortableTrait;
+    use HasFactory, HasTags, HasFlexible, SortableTrait, HasUrlBuilder;
 
     const STATUS_PUBLISHED = 'Published';
     const STATUS_DRAFT = 'Draft';
@@ -31,13 +33,6 @@ class Page extends Model implements Sortable
     {
         return config('nova-page-manager-tool.pages_table_name');
     }
-
-    public function url($args = []): string
-    {
-        // TODO: Build the correct url path
-        return env('APP_URL') . '/' . $this->slug;
-    }
-
 
     /**
      * @deprecated

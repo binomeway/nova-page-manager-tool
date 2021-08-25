@@ -113,3 +113,24 @@ TODO: documentation
 ## Credits
 
 - [Codrin Axinte](https://github.com/codrin-axinte)
+
+
+## Changelog
+
+### 1.1.0
+ - Added **sorting** for `Page` resource
+ - Added URL builder for `Page`.
+ - **Breaking Changes** Refactored `content` column into `summary` column.
+ - Refactored `meta` column into `blocks` column
+ - Removed `PageFactory` since it wasn't used. It will be added back, later.
+
+
+### 1.0.2
+ - Implemented position tag filtering
+
+### 1.0.1
+- Changed text for 'Other' into Page Builder
+- Changed text for 'Meta' into Blocks
+
+### 1.0.0
+- Release

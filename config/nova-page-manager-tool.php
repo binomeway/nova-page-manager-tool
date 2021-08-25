@@ -56,4 +56,12 @@ return [
         \BinomeWay\NovaPageManagerTool\Layouts\ContentSectionLayout::class,
     ],
 
+    /**
+     * The url builder is used whenever the 'url' within the model is called.
+     * You can create your own url builder by either extending the PageUrlBuilder or
+     * by implementing the BinomeWay\NovaPageManagerTool\Contracts\UrlBuilder contract.
+     */
+    'url_builder' => [
+        'page' => \BinomeWay\NovaPageManagerTool\Utils\PageUrlBuilder::class,
+    ],
 ];
