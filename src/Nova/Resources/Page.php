@@ -78,10 +78,9 @@ class Page extends Resource
                 ->onlyOnForms()
                 ->required(),
 
-
             Text::make(__('Label'), 'label')
                 ->help(__('This will be used when the page is placed in menu list, if left empty the title will be the default value.'))
-                ->sortable()
+                ->hideFromIndex()
                 ->nullable(),
 
             Select::make(__('Template'), 'template')
