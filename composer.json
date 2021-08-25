@@ -12,6 +12,8 @@
         "spatie/laravel-package-tools": "^1.9",
         "eminiarts/nova-tabs": "^1.4",
         "whitecube/nova-flexible-content": "^0.2.8",
+        "spatie/eloquent-sortable": "^4.0.0",
+        "optimistdigital/nova-sortable": "^2.4.0",
         "binomeway/nova-taxonomies-tool": "*"
     },
     "autoload": {

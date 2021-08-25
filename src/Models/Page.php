@@ -3,7 +3,9 @@
 
 namespace BinomeWay\NovaPageManagerTool\Models;
 
-
+use BinomeWay\NovaPageManagerTool\Tags\PagePositionsTag;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 use BinomeWay\NovaPageManagerTool\Database\Factories\PageFactory;
 use BinomeWay\NovaPageManagerTool\Tags\PageStatusTag;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,24 +14,18 @@ use Spatie\Tags\HasTags;
 use Whitecube\NovaFlexibleContent\Concerns\HasFlexible;
 use Whitecube\NovaFlexibleContent\Value\FlexibleCast;
 
-class Page extends Model
+class Page extends Model implements Sortable
 {
-    use HasFactory, HasTags, HasFlexible;
+    use HasFactory, HasTags, HasFlexible, SortableTrait;
 
-    const STATUS_PUBLISHED = 'published';
-    const STATUS_DRAFT = 'draft';
+    const STATUS_PUBLISHED = 'Published';
+    const STATUS_DRAFT = 'Draft';
 
     protected $fillable = ['status', 'positions'];
 
     protected $casts = [
-        'meta' => FlexibleCast::class,
+        'blocks' => FlexibleCast::class,
     ];
-
-    protected static function newFactory()
-    {
-        return new PageFactory();
-    }
-
 
     public function getTable()
     {
@@ -43,12 +39,22 @@ class Page extends Model
     }
 
 
+    /**
+     * @deprecated
+     * @param $status
+     * @return bool
+     */
     public function isStatus($status): bool
     {
         // TODO: Refactor to use spatie/tags
         return $this->status === $status;
     }
 
+
+    public function scopeWherePositions($query, array $positions, string $tagType = PagePositionsTag::NAME)
+    {
+        return $query->withAnyTags($positions, $tagType);
+    }
 
     public function scopeWhereStatus($query, array $statuses, string $tagType = PageStatusTag::NAME)
     {
@@ -57,11 +63,11 @@ class Page extends Model
 
     public function scopePublished($query)
     {
-        return $query->withAnyTags(['published'], PageStatusTag::NAME);
+        return $query->withAnyTags([self::STATUS_PUBLISHED], PageStatusTag::NAME);
     }
 
     public function scopeDraft($query)
     {
-        return $query->withAnyTags(['draft'], PageStatusTag::NAME);
+        return $query->withAnyTags([self::STATUS_DRAFT], PageStatusTag::NAME);
     }
 }
