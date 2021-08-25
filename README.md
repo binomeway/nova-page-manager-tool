@@ -62,6 +62,14 @@ class AboutTemplate extends Template
 
 ```
 
+or use the generator command:
+
+```shell
+php artisan nova-page-manager:template AboutTemplate
+```
+
+It will generate for you the template class, and the view file.
+
 #### Registering Templates
 
 After you have defined your template, register it from a ServiceProvider. It can be placed in the `AppServiceProvider`, `ViewServiceProvider` or any other service provider.

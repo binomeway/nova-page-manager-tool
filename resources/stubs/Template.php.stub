@@ -1,0 +1,12 @@
+<?php
+
+namespace DummyNamespace;
+
+use BinomeWay\NovaPageManagerTool\Template;
+
+class DummyClass extends Template
+{
+    protected string $label = 'DummyLabel';
+    protected string $path = 'DummyPath';
+    protected string $group = 'DummyGroup';
+}

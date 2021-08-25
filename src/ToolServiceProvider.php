@@ -2,6 +2,7 @@
 
 namespace BinomeWay\NovaPageManagerTool;
 
+use BinomeWay\NovaPageManagerTool\Commands\TemplateMakeCommand;
 use BinomeWay\NovaPageManagerTool\Http\Middleware\Authorize;
 use BinomeWay\NovaPageManagerTool\Layouts\TrixLayout;
 use BinomeWay\NovaPageManagerTool\Services\PageBuilder;
@@ -19,6 +20,9 @@ class ToolServiceProvider extends PackageServiceProvider
             ->name('nova-page-manager-tool')
             ->hasConfigFile()
             ->hasViews()
+            ->hasCommands([
+                TemplateMakeCommand::class,
+            ])
             ->hasMigrations([
                 'create_pages_table'
             ]);
