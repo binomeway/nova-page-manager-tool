@@ -104,6 +104,7 @@ TODO: documentation
 
 - [X] ~~Page builder~~
 - [ ] Improved publishing workflow
+- [ ] Scheduled publishing
 - [ ] Improved template system
 - [ ] Versioning system
 - [ ] Multi-Language support
