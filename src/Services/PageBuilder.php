@@ -6,23 +6,22 @@ namespace BinomeWay\NovaPageManagerTool\Services;
 
 use Illuminate\Support\Collection;
 use JetBrains\PhpStorm\Pure;
-use Whitecube\NovaFlexibleContent\Flexible;
 
 class PageBuilder
 {
     private Collection $blocks;
 
-    public function __construct(array $blocks = [])
+    public function __construct()
     {
         $this->blocks = collect();
 
-        $this->register($blocks);
+        $this->register(config('nova-page-manager-tool.blocks', []));
     }
 
     public function register(array $blocks): static
     {
-        foreach ($blocks as $block) {
-            $this->blocks->push($block);
+        foreach ($blocks as $name => $block) {
+            $this->blocks->put($name, $block);
         }
 
         return $this;

@@ -70,7 +70,7 @@ class ToolServiceProvider extends PackageServiceProvider
      */
     public function packageRegistered()
     {
-        $this->app->singleton(PageBuilder::class, fn() => new PageBuilder(config('nova-page-manager-tool.layouts', [])));
+        $this->app->singleton(PageBuilder::class);
         $this->app->singleton(TemplateManager::class);
     }
 

@@ -1,13 +1,13 @@
 <?php
 
 
-namespace BinomeWay\NovaPageManagerTool\Layouts;
+namespace BinomeWay\NovaPageManagerTool\Blocks;
 
 
+use BinomeWay\NovaPageManagerTool\Block;
 use Manogi\Tiptap\Tiptap;
-use Whitecube\NovaFlexibleContent\Layouts\Layout;
 
-class ContentSectionLayout extends Layout
+class ContentSectionBlock extends Block
 {
     /**
      * The layout's unique identifier
@@ -22,6 +22,8 @@ class ContentSectionLayout extends Layout
      * @var string
      */
     protected $title = 'Content Section';
+
+    protected string $component = 'nova-page-manager-tool::blocks.content-section';
 
     /**
      * Get the fields displayed by the layout.

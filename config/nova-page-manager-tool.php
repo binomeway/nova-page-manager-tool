@@ -54,12 +54,15 @@ return [
 
 
     /**
-     * The default layouts that are available for the page builder
+     * Here you can define the mappings for each block.
      *
-     * If there are no layouts, the flexible filed will be hidden.
+     * The default blocks that are available for the page builder
+     *
+     * If there are no blocks, the flexible field will be hidden.
      */
-    'layouts' => [
-        \BinomeWay\NovaPageManagerTool\Layouts\ContentSectionLayout::class,
+    'blocks' => [
+        'content-section' => \BinomeWay\NovaPageManagerTool\Blocks\ContentSectionBlock::class,
+        'image-section' =>  \BinomeWay\NovaPageManagerTool\Blocks\ImageSectionBlock::class,
     ],
 
     /**

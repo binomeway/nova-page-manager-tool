@@ -58,7 +58,7 @@ class Page extends Resource
         return [
 
             Stack::make(__('Title'), [
-                Line::make(__('Title'),'title')->asHeading(),
+                Line::make(__('Title'), 'title')->asHeading(),
 
                 Line::make(__('Slug'), fn() => view('nova-page-manager-tool::nova.slug-link', [
                     'slug' => $this->slug,
@@ -104,20 +104,22 @@ class Page extends Resource
             FieldPresets::tiptap(__('Summary'), 'summary'),
 
             Tabs::make(__('Content'), [
-                Tab::make(__('Page Builder'), $this->otherFields())
+                Tab::make(__('Page Builder'), $this->pageBuilderFields())
             ]),
         ];
     }
 
-    private function otherFields(): array
+    private function pageBuilderFields(): array
     {
-        $fields = [];
-        if (PageBuilder::hasAnyBlocks()) {
-            $fields[] = Flexible::make(__('Blocks'), 'blocks')
-                ->preset(config('nova-page-manager-tool.preset', PageBuilderPreset::class));
+        if (!PageBuilder::hasAnyBlocks()) {
+            return [];
         }
 
-        return $fields;
+        $flexibleField = Flexible::make(__('Blocks'), 'blocks')
+            ->preset(config('nova-page-manager-tool.preset', PageBuilderPreset::class));
+
+
+        return [$flexibleField];
     }
 
     /**

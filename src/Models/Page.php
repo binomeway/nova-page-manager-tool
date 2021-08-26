@@ -3,8 +3,8 @@
 
 namespace BinomeWay\NovaPageManagerTool\Models;
 
+use BinomeWay\NovaPageManagerTool\Casts\BlocksFlexibleCast;
 use BinomeWay\NovaPageManagerTool\Contracts\InteractsWithUrlBuilder;
-use BinomeWay\NovaPageManagerTool\Database\Factories\PageFactory;
 use BinomeWay\NovaPageManagerTool\Tags\PagePositionsTag;
 use BinomeWay\NovaPageManagerTool\Tags\PageStatusTag;
 use BinomeWay\NovaPageManagerTool\Traits\HasUrlBuilder;
@@ -12,19 +12,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Tags\HasTags;
 use Spatie\Tags\Tag;
 use Whitecube\NovaFlexibleContent\Concerns\HasFlexible;
-use Whitecube\NovaFlexibleContent\Value\FlexibleCast;
 
 /**
  * Class Page
  * @package BinomeWay\NovaPageManagerTool\Models
  * @property-read Tag $status
  */
-class Page extends Model implements Sortable, InteractsWithUrlBuilder
+class Page extends Model implements Sortable, InteractsWithUrlBuilder, HasMedia
 {
-    use HasFactory, HasTags, HasFlexible, SortableTrait, HasUrlBuilder;
+    use HasFactory, HasTags, HasFlexible, SortableTrait, HasUrlBuilder, InteractsWithMedia;
 
     const STATUS_PUBLISHED = 'Published';
     const STATUS_DRAFT = 'Draft';
@@ -32,7 +33,7 @@ class Page extends Model implements Sortable, InteractsWithUrlBuilder
     protected $fillable = ['status', 'positions'];
 
     protected $casts = [
-        'blocks' => FlexibleCast::class,
+        'blocks' => BlocksFlexibleCast::class,
     ];
 
     public function getTable()
