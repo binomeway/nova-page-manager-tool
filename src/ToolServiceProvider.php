@@ -4,9 +4,8 @@ namespace BinomeWay\NovaPageManagerTool;
 
 use BinomeWay\NovaPageManagerTool\Commands\TemplateMakeCommand;
 use BinomeWay\NovaPageManagerTool\Http\Middleware\Authorize;
-use BinomeWay\NovaPageManagerTool\Layouts\TrixLayout;
 use BinomeWay\NovaPageManagerTool\Services\PageBuilder;
-use BinomeWay\NovaPageManagerTool\Services\TemplateManager;
+use BinomeWay\NovaPageManagerTool\Facades\TemplateManager;
 use Illuminate\Support\Facades\Route;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -44,6 +43,8 @@ class ToolServiceProvider extends PackageServiceProvider
         /* Nova::serving(function (ServingNova $event) {
              //
          });*/
+
+        TemplateManager::autoloadTemplates();
     }
 
     /**
@@ -70,7 +71,7 @@ class ToolServiceProvider extends PackageServiceProvider
     public function packageRegistered()
     {
         $this->app->singleton(PageBuilder::class, fn() => new PageBuilder(config('nova-page-manager-tool.layouts', [])));
-        $this->app->singleton(TemplateManager::class, fn() => new TemplateManager(config('nova-page-manager-tool.templates', [])));
+        $this->app->singleton(TemplateManager::class);
     }
 
 

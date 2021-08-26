@@ -4,28 +4,29 @@
 namespace BinomeWay\NovaPageManagerTool\Services;
 
 
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 
 class TemplateManager
 {
     private Collection $templates;
     private Collection $resolved;
+    private Filesystem $files;
 
     /**
      * PageManager constructor.
      */
-    public function __construct(array $templates = [])
+    public function __construct(Filesystem $files)
     {
+        $this->files = $files;
         $this->templates = collect();
         $this->resolved = collect();
-
-        if ($templates) {
-            $this->register($templates);
-        }
     }
 
     public function register(array $templates): static
     {
+        $templates = array_filter($templates, fn($template) => class_exists($template));
+
         foreach ($templates as $template) {
             $this->templates->push($template);
         }
@@ -71,5 +72,24 @@ class TemplateManager
         return $this->templates()->mapWithKeys(
             fn($template) => [$template->path() => $template->toArray()]
         );
+    }
+
+    public function autoloadTemplates()
+    {
+        $templates =  config('nova-page-manager-tool.templates', []);
+        $templatesPath = config('nova-page-manager-tool.templates_namespace', 'Templates');
+
+
+        // Collect all the templates from the App folder
+        $files = $this->files->allFiles(app_path($templatesPath));
+
+        $namespace = app()->getNamespace() . "{$templatesPath}\\";
+
+        foreach ($files as $file) {
+            $name = $file->getFilenameWithoutExtension();
+            $templates[] = $namespace . $name;
+        }
+
+        $this->register($templates);
     }
 }

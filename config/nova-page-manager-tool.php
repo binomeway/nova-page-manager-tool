@@ -31,6 +31,12 @@ return [
         \BinomeWay\NovaPageManagerTool\Templates\DefaultTemplate::class,
     ],
 
+    /**
+     * The default namespace where classes should be generated to and autoloaded from.
+     * Will be prefixed with the root namespace
+     */
+    'templates_namespace' => 'Templates',
+
 
     /**
      * If there are more layouts than the set threshold,

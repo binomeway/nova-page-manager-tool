@@ -50,7 +50,7 @@ class TemplateMakeCommand extends GeneratorCommand
 
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\Templates';
+        return $rootNamespace . '\\'. config('nova-page-manager-tool.templates_namespace', 'Templates');
     }
 
     protected function getOptions()
