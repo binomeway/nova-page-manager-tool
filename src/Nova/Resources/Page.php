@@ -51,19 +51,20 @@ class Page extends Resource
         'id', 'title', 'summary', 'slug', 'label',
     ];
 
+    public static $with = ['tags'];
+
     public function fields(Request $request)
     {
         return [
 
             Stack::make(__('Title'), [
-                Line::make(__('Title'), 'title')->asHeading(),
+                Line::make(__('Title'),'title')->asHeading(),
 
                 Line::make(__('Slug'), fn() => view('nova-page-manager-tool::nova.slug-link', [
                     'slug' => $this->slug,
                     'url' => $this->url(),
                 ])->render()
-                )->asHtml()
-                    ->asSmall(),
+                )->asHtml()->asSmall(),
 
             ])->sortable(),
 
