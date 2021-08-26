@@ -64,7 +64,6 @@ class Page extends Model implements Sortable, InteractsWithUrlBuilder
 
     public function getStatusAttribute()
     {
-        debugbar()->info('status');
         return $this->tagsWithType(PageStatusTag::NAME)->first() ?? new Tag();
     }
 
