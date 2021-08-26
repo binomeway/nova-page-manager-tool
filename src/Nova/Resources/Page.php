@@ -97,14 +97,13 @@ class Page extends Resource
                 ->type(PagePositionsTag::NAME)
                 ->nullable()
                 ->withLinkToTagResource(Tag::class)
-                ->withMeta(['placeholder' => __('Add position')])
-                ->help(__('Add a position tag where this page should be visible.'))->hideFromIndex(),
+                ->withMeta(['placeholder' => __('Add position'), 'help' => 'Test'])
+                ->help(__('Add a position tag where this page should be visible.'))
+                ->hideFromIndex(),
 
-            Tabs::make(__('Tabs'), [
-                Tab::make(__('Body'), [
-                    FieldPresets::tiptap(__('Summary'), 'summary'),
-                ]),
+            FieldPresets::tiptap(__('Summary'), 'summary'),
 
+            Tabs::make(__('Content'), [
                 Tab::make(__('Page Builder'), $this->otherFields())
             ]),
         ];
