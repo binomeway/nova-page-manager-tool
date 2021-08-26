@@ -4,18 +4,24 @@
 namespace BinomeWay\NovaPageManagerTool\Models;
 
 use BinomeWay\NovaPageManagerTool\Contracts\InteractsWithUrlBuilder;
-use BinomeWay\NovaPageManagerTool\Tags\PagePositionsTag;
-use BinomeWay\NovaPageManagerTool\Traits\HasUrlBuilder;
-use Spatie\EloquentSortable\Sortable;
-use Spatie\EloquentSortable\SortableTrait;
 use BinomeWay\NovaPageManagerTool\Database\Factories\PageFactory;
+use BinomeWay\NovaPageManagerTool\Tags\PagePositionsTag;
 use BinomeWay\NovaPageManagerTool\Tags\PageStatusTag;
+use BinomeWay\NovaPageManagerTool\Traits\HasUrlBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 use Spatie\Tags\HasTags;
+use Spatie\Tags\Tag;
 use Whitecube\NovaFlexibleContent\Concerns\HasFlexible;
 use Whitecube\NovaFlexibleContent\Value\FlexibleCast;
 
+/**
+ * Class Page
+ * @package BinomeWay\NovaPageManagerTool\Models
+ * @property-read Tag $status
+ */
 class Page extends Model implements Sortable, InteractsWithUrlBuilder
 {
     use HasFactory, HasTags, HasFlexible, SortableTrait, HasUrlBuilder;
@@ -35,16 +41,32 @@ class Page extends Model implements Sortable, InteractsWithUrlBuilder
     }
 
     /**
-     * @deprecated
      * @param $status
      * @return bool
+     * @deprecated
      */
     public function isStatus($status): bool
     {
-        // TODO: Refactor to use spatie/tags
-        return $this->status === $status;
+        $givenStatus = $this->status->name;
+
+        return $givenStatus === $status;
     }
 
+    public function isPublished(): bool
+    {
+        return $this->status->name === self::STATUS_PUBLISHED;
+    }
+
+    public function isDraft(): bool
+    {
+        return $this->status->name === self::STATUS_DRAFT;
+    }
+
+    public function getStatusAttribute()
+    {
+        debugbar()->info('status');
+        return $this->tagsWithType(PageStatusTag::NAME)->first() ?? new Tag();
+    }
 
     public function scopeWherePositions($query, array $positions, string $tagType = PagePositionsTag::NAME)
     {
