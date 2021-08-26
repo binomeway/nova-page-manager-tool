@@ -132,6 +132,7 @@ TODO: documentation
  - **Breaking Changes** Refactored `content` column into `summary` column.
  - Refactored `meta` column into `blocks` column
  - Removed `PageFactory` since it wasn't used. It will be added back, later.
+ - Added helper methods for *status* tag within `Page` model.
 
 
 ### 1.0.2
